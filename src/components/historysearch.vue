@@ -52,7 +52,7 @@
           }
           let req_info = qs.stringify(req_data);
 
-          axios.post('http://localhost:11111/monitor/v1/items', req_info,
+          axios.post('http://10.83.3.46:11111/monitor/v1/items', req_info,
             {
               headers:{
               'Content-type': 'application/x-www-form-urlencoded',
