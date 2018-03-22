@@ -1,26 +1,5 @@
 
 <template>
-<div>
-    <el-container style="height: 100%; border: 0px">
-          <el-aside width="200px">
-            <el-menu :default-openeds="['1']">
-              <el-submenu index="1">
-                <template slot="title"><i class="el-icon-menu"></i>Dashboard</template>
-                <el-menu-item-group>
-                  <el-menu-item index="1-1"><a href="/overview">机器概况</a></el-menu-item>
-                  <a href="/datasearch"><el-menu-item index="1-2">数据展示</el-menu-item></a>
-                </el-menu-item-group>
-              </el-submenu>
-            </el-menu>
-          </el-aside>
-
-    <el-container>
-      <el-header style="text-align: left; font-size: 20px">
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-        <span>Ease Monitor</span>
-      </el-header>
-
-
       <el-main>
 
         <toggleform/>
@@ -28,10 +7,6 @@
         <systemview/>
 
       </el-main>
-     </el-container>  
-    </el-container>
-</div>
-  
 </template>
 
 <style>

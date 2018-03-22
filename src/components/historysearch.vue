@@ -34,7 +34,7 @@
     watch: {
       showDataObj: {
         handler(val, oldVal){
-          console.log('echats refresh1111')
+          
           this.myChart.showLoading();
           this.myChart.setOption(this.getOption(val));
           this.myChart.hideLoading();
@@ -66,13 +66,38 @@
             this.showDataObj.date = []
             for (var obj of res.data) {
                 this.showDataObj.date.push(this.dateFormat(obj.timestamp))
-                this.showDataObj.data.push(obj.value);
+                this.showDataObj.data.push(this.getDataFormater(this.showDataObj.reqInfo.metric, obj.value));
             }
-            console.log(this.showDataObj)
+
           })
           .catch((err)=>{
             console.log(err)
           })
+      },getYaxis(){
+          let args = this.showDataObj.reqInfo.metric.split('.')
+          if (args[args.length-1] === 'percent' || args[3] === 'percent'){
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value} %'
+              }
+            }
+          }
+          else if (args[0] == 'mem'){
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value} M'
+              }
+            }
+          }else{
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value}'
+              }
+            }
+          }
       },
       getOption (val) {
         let option = {
@@ -100,10 +125,7 @@
                       boundaryGap: false,
                       data: val.date
                   },
-                  yAxis: {
-                      type: 'value',
-                      boundaryGap: [0, '100%']
-                  },
+                  yAxis: this.getYaxis(),
                   dataZoom: [{
                       type: 'inside',
                       start: 50,
@@ -162,37 +184,22 @@
               newDate.getMinutes()].join(':');
       },
       getUserChartInit() {
-        console.log('echats refresh')
-        var myChart = echarts.init(document.getElementById('userChart'));
-        this.myChart = myChart
+        this.myChart = echarts.init(document.getElementById('userChart'));
         this.myChart.showLoading();
-        var req_data = this.showDataObj.reqInfo
-        req_data = qs.stringify(req_data);
-
-        axios.post('http://10.83.3.46:11111/monitor/v1/items', req_data,
-          {
-            headers:{
-            'Content-type': 'application/x-www-form-urlencoded',
-          }})
-        .then((res) => {
-
-          this.showDataObj.data = []
-          this.showDataObj.date = []
-          for (var obj of res.data) {
-              this.showDataObj.date.push(this.dateFormat(obj.timestamp))
-              this.showDataObj.data.push(obj.value);
+        this.myChart.setOption(this.getOption(this.showDataObj));
+        this.myChart.hideLoading();
+      
+      },
+      getDataFormater(metric_name, data){
+          let args = metric_name.split('.')
+          let metricType = args[0]
+          let percent = args[args.length-1]
+          if (metricType == 'mem' && percent !== 'percent'){
+            return Math.floor(data/1024/1024)
+          }else{
+            return data
           }
-          
-         this.myChart.setOption(this.getOption(this.showDataObj));
-         this.myChart.hideLoading();
-
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
-        
       }
-     
     },
     mounted () {
       this.$nextTick(function () {

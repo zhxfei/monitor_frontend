@@ -60,18 +60,17 @@ export default {
                         containLabel: true
                     },
                     toolbox: {
-                        feature: {
-                            saveAsImage: {}
-                        }
+                      feature: {
+                          restore: {},
+                          saveAsImage: {}
+                      }
                     },
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
                         data: this.showdate
                     },
-                    yAxis: {
-                        type: 'value'
-                    },
+                    yAxis: this.getYaxis(),
                     series: this.showdata
             };
             return option
@@ -80,6 +79,32 @@ export default {
             let markArray = this.initMetricList[0].split(".", 2)
             return this.showHost + ":" +markArray[0] + '.' + markArray[1]
         },
+        getYaxis(){
+          let args = this.initMetricList[0].split('.')
+          if (args[args.length-1] === 'percent' || args[3] === 'percent'){
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value} %'
+              }
+            }
+          }
+          else if (args[0] == 'mem'){
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value} M'
+              }
+            }
+          }else{
+            return {
+              type : 'value',
+              axisLabel : {
+                formatter: '{value}'
+              }
+            }
+          }
+      },
         dateFormat (t1) {
             var newDate = new Date();
             newDate.setTime(t1 * 1000);
@@ -126,8 +151,7 @@ export default {
                     this.showdata.push({
                         name: metric_name,
                         type:'line',
-                        stack: '总量',
-                        data: this.genShowData(res.data)
+                        data: this.genShowData(metric_name, res.data)
                     });
                 })
                 .catch((err)=>{
@@ -135,10 +159,10 @@ export default {
                 })
             }
         },
-        genShowData(data){
+        genShowData(metric_name, data){
             let rData = [];
             for (var obj of data) {
-                rData.push(obj.value);
+                rData.push(this.getDataFormater(metric_name, obj.value));
             }
             if (this.showdate.length == 0){
                 for (var obj of data) {
@@ -146,17 +170,27 @@ export default {
                 }    
             }
             return rData;
+        },getDataFormater(metric_name, data){
+          let args = metric_name.split('.')
+          let metricType = args[0]
+          let percent = args[args.length-1]
+          if (metricType == 'mem' && percent !== 'percent'){
+            return Math.floor(data/1024/1024)
+          }else{
+            return data
+          }
         },
         // eventHandler
         toggleEventHandler(formData){
-          this.showHost = formData.chosedhost
-      }
+            this.showdate = []
+            this.showdata = []
+            this.showHost = formData.chosedhost
+        },
     },
     mounted () {
       this.$nextTick(function () {
         this.getUserChartInit();
       })
-        // this.getUserChartInit();
     },
     created() {
         this.$bus1.$on('toggle-event', this.toggleEventHandler)

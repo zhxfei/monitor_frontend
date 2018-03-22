@@ -66,10 +66,7 @@ export default {
                 "cpu.system.percent",
                 "cpu.user.percent",
                 "cpu.iowait.percent",
-                "cpu.nice.percent",
-                "cpu.irq.percent",
-                "cpu.steal.percent",
-                "cpu.idel.percent",
+                "cpu.idle.percent",
             ],
             initMemMetricList : [
                 "mem.virtual.used",
@@ -82,10 +79,10 @@ export default {
                 "system.load.avg.1min/core",
             ],
             initNetMetricList: [
-                "net.conn.syn_recv",
-                "net.conn.listen",
+                // "net.conn.syn_recv",
                 "net.conn.established",
-                "net.conn.time_wait"
+                "net.conn.time_wait",
+                "net.conn.syn_recv"
             ]
         }
     },

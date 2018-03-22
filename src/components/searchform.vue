@@ -6,13 +6,23 @@
             style="float: left">
             
             <el-form-item label="Host">
-                <el-select v-model="formInline.chosedhost" 
+                <el-select v-model="formInline.chosedhost"
                            filterable
-                           placeholder="Host">
+                           placeholder="Host"
+                           v-if="this.$route.path == '/datasearch'">                
+                    <el-option v-for="(host, index) in hostList" :label="host" :value="host" :key="index"></el-option>
+                </el-select>
+
+                <el-select v-model="formInline.chosedhost"
+                           filterable
+                           multiple
+                           placeholder="Host"
+                           style="width: 280px"
+                           v-else>                
                     <el-option v-for="(host, index) in hostList" :label="host" :value="host" :key="index"></el-option>
                 </el-select>
             </el-form-item>
-            
+            <!-- <br> -->
             <el-form-item label="Item">
                 <el-select v-model="formInline.chosedItem" filterable placeholder="Item">
                     <el-option v-for="(item, index) in itemList" :label="item" :value="item" :key="index"></el-option>
@@ -32,8 +42,6 @@
                     :default-time="['12:00:00']">
                     </el-date-picker>
                 </div>
-
-
             </el-form-item>
 
 
@@ -42,7 +50,6 @@
             </el-form-item>
 
         </el-form>
-
         </el-col>
     </el-row>
 </template>
@@ -108,10 +115,16 @@
       }
     },
     watch: {
-      formInline: {
+      'formInline.chosedhost': {
         handler(val, oldVal){
-          console.log('echats refresh1111')
-          let req_data = { 'endpoint': val.chosedhost}
+          if(Object.prototype.toString.call(val)=='[object Array]'){
+            if (val.length != 0){
+              var req_data = { 'endpoint': val[0]}
+            }
+          }else{
+            var req_data = { 'endpoint': val}          
+          }
+          console.log(req_data)
           axios.get('http://localhost:11111/monitor/v1/metrics', {
             params: req_data,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -123,12 +136,15 @@
             console.log(err)
           })
         },
-        deep: true
       }
     },
     methods: {
       onSubmit() {
-        this.$bus.$emit('submit-event', this.formInline)
+        if(this.$route.path == '/datasearch'){
+          this.$bus.$emit('submit-event', this.formInline)
+        }else{
+          this.$bus.$emit('compare-event', this.formInline)
+        }
       }
     },
     mounted(){

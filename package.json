@@ -15,7 +15,6 @@
     "element-ui": "^2.2.2",
     "selector": "^1.0.0",
     "vue": "^2.5.2",
-    "vue-echarts": "^3.0.4",
     "vue-loader": "^13.7.1",
     "vue-router": "^3.0.1"
   },

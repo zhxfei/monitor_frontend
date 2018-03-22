@@ -10,6 +10,7 @@ import 'echarts/lib/component/tooltip'
 
 import datasearch from './components/datasearch'
 import overview from './components/overview'
+import compare from './components/compare'
 
 Vue.config.productionTip = false;
 
@@ -36,6 +37,11 @@ let router = new VRouter({
       name: 'datasearch',
       component: datasearch
     },
+    {
+      path: '/compare',
+      name: 'compare',
+      component: compare
+    }
   ]
 })
 
@@ -43,7 +49,7 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>',
+  // template: '<App/>',
   render: h => h(App)
 })
 

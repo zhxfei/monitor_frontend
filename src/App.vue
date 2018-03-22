@@ -1,12 +1,35 @@
 <template>
   <div id="app">
+    <el-container style="height: 100%; border: 0px">
+          <el-aside width="200px">
+            <el-menu :default-openeds="['1']">
+              <el-submenu index="1">
+                <template slot="title"><i class="el-icon-menu"></i>Dashboard</template>
+                <el-menu-item-group>
+                  <el-menu-item index="1-1"><router-link to="/overview">机器指标概览</router-link></el-menu-item>
+                  <el-menu-item index="1-2"><router-link to="/datasearch">历史数据查询</router-link></el-menu-item>
+                  <el-menu-item index="1-3"><router-link to="/compare">机器指标对比</router-link></el-menu-item>
+                </el-menu-item-group>
+              </el-submenu>
+            </el-menu>
+          </el-aside>
+
+    <el-container>
+      <el-header style="text-align: left; font-size: 20px">
+          <i class="el-icon-setting" style="margin-right: 15px"></i>
+        <span>Ease Monitor</span>
+      </el-header>
 
           <transition>
             <keep-alive>
+
               <router-view></router-view>
+            
             </keep-alive>
           </transition>
-
+          
+     </el-container>  
+    </el-container>
   </div>
   
 </template>
@@ -38,4 +61,5 @@ export default {
   color: #2c3e50;
   margin-top: 0px;
 }
+
 </style>

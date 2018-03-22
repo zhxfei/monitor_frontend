@@ -25,6 +25,22 @@ export default {
       'guageid',
       'metricName'  
     ],
+    watch:{
+        showdata: {
+            handler(){
+                this.chart.setOption(this.getOption());
+                this.chart.hideLoading();
+            }
+        },
+        showHost: {
+            handler(){
+                console.log('show host changed')
+                this.getDataInit()
+                this.chart.setOption(this.getOption());
+                this.chart.hideLoading();                
+            }
+        }
+    },
     methods: {
         getOption(metric_info){
             let option = {
@@ -87,13 +103,24 @@ export default {
             .catch((err)=>{
                 console.log(err)
             })
-        }
+        },
+        toggleEventHandler(formData){
+          this.showHost = formData.chosedhost
+          this.showdata = {}
+      }
     },
     mounted () {
       this.$nextTick(function () {
         this.getUserChartInit();
       })
+        // this.getUserChartInit();
     },
+    created() {
+        this.$bus1.$on('toggle-event', this.toggleEventHandler)
+    },
+    beforeDestroy() {
+      this.$bus1.$off('toggle-event', this.handleMyEvent)
+    }
 }
 
 </script>
