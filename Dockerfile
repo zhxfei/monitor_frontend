@@ -1,4 +1,4 @@
-FROM node:6.10.3-slim
+FROM hub.c.163.com/library/node:6.10.3-slim
 
 RUN apt-get update \
     && apt-get install -y nginx
