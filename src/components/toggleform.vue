@@ -43,7 +43,7 @@
       }
     },
     mounted(){
-      axios.get('http://10.83.3.46:11111/monitor/v1/hosts',{
+      axios.get('http://' + this.$apiHost + '/monitor/v1/hosts',{
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
       .then((res) => {

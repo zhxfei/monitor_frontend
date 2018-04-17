@@ -21,7 +21,7 @@
         myChart : {},
         showDataObj : {
           reqInfo: {
-            endpoint: 'newbie-unknown85822.i.nease.net',  // default
+            endpoint: this.$defaultShowHost,  // default
             metric: 'system.load.avg.1min/core', // default
             e_time: Date.parse(new Date()),  // default
             s_time: 0,  // default
@@ -52,7 +52,7 @@
           }
           let req_info = qs.stringify(req_data);
 
-          axios.post('http://10.83.3.46:11111/monitor/v1/items', req_info,
+          axios.post('http://' + this.$apiHost + '/monitor/v1/items', req_info,
             {
               headers:{
               'Content-type': 'application/x-www-form-urlencoded',

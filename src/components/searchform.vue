@@ -125,7 +125,7 @@
             var req_data = { 'endpoint': val}          
           }
           console.log(req_data)
-          axios.get('http://10.83.3.46:11111/monitor/v1/metrics', {
+          axios.get('http://' + this.$apiHost + '/monitor/v1/metrics', {
             params: req_data,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           })
@@ -148,7 +148,7 @@
       }
     },
     mounted(){
-      axios.get('http://10.83.3.46:11111/monitor/v1/hosts',{
+      axios.get('http://' + this.$apiHost + '/monitor/v1/hosts',{
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
       .then((res) => {

@@ -60,7 +60,7 @@ export default {
                 "system.load.1min",
                 "system.load.avg.5min",
                 "system.load.avg.15min",
-                'df.bytes.used.percent/home',
+                'df.bytes.used.percent./',
             ],
             initCpuMetricList: [
                 "cpu.system.percent",

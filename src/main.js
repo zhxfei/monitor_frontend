@@ -19,6 +19,8 @@ Vue.use(VRouter);
 
 Vue.prototype.$bus = new Vue();
 Vue.prototype.$bus1 = new Vue();
+Vue.prototype.$apiHost = 'hkweb.zhxfei.com:5556'
+Vue.prototype.$defaultShowHost = 'hkweb.zhxfei.com'
 
 let router = new VRouter({
   mode: 'history',
