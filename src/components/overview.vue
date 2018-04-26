@@ -1,12 +1,11 @@
-
 <template>
-      <el-main>
+  <el-main>
 
-        <toggleform/>
-        <!-- 展示组件 -->
-        <systemview/>
+    <toggleform/>
+    <!-- 展示组件 -->
+    <systemview/>
 
-      </el-main>
+  </el-main>
 </template>
 
 <style>
@@ -23,25 +22,25 @@
   .el-main {
     width: 100%
   }
-  .span{
-    font-family: "Helvetica Neue",
+
+  .span {
+    font-family: "Helvetica Neue";
   }
 </style>
 
 <script>
-import toggleform from './toggleform'
-import systemview from './systemview'
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+  import toggleform from './toggleform'
+  import systemview from './systemview'
+  // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   export default {
     name: 'overview',
     data() {
-      return {
-      }
+      return {}
     },
     components: {
       toggleform,
       systemview
-  },
-};
+    },
+  };
 </script>

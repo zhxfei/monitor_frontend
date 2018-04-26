@@ -11,6 +11,8 @@ import 'echarts/lib/component/tooltip'
 import datasearch from './components/datasearch'
 import overview from './components/overview'
 import compare from './components/compare'
+import datamanage from './components/datamanage'
+import usermanage from './components/usermanage'
 
 Vue.config.productionTip = false;
 
@@ -18,9 +20,9 @@ Vue.use(ElementUI);
 Vue.use(VRouter);
 
 Vue.prototype.$bus = new Vue();
-Vue.prototype.$bus1 = new Vue();
-Vue.prototype.$apiHost = 'hkweb.zhxfei.com:5556'
-Vue.prototype.$defaultShowHost = 'hkweb.zhxfei.com'
+Vue.prototype.$apiHost = 'localhost:11111';
+Vue.prototype.$defaultShowHost = 'newbie-unknown85824.i.nease.net';
+Vue.prototype.$defaultShowNetDev = 'eth0';
 
 let router = new VRouter({
   mode: 'history',
@@ -43,15 +45,24 @@ let router = new VRouter({
       path: '/compare',
       name: 'compare',
       component: compare
-    }
-  ]
-})
+    },
+    {
+      path: '/datamanage',
+      name: 'datamanage',
+      component: datamanage
+    },
+    {
+      path: '/usermanage',
+      name: 'usermanage',
+      component: usermanage
+    }]
+});
 
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {App},
   // template: '<App/>',
   render: h => h(App)
-})
+});
 

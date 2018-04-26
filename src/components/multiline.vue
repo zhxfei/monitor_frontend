@@ -1,205 +1,235 @@
 <template>
-  
+
   <div class="chart-container">
-      <div :id="this.echartsid" style="height: 400px" >图表加载失败</div>
+    <div :id="this.echartsid" style="height: 400px">图表加载失败</div>
   </div>
 </template>
 
 <script>
-import echarts from 'echarts'
-import axios from 'axios'
-import qs from 'qs'
+  import echarts from 'echarts'
+  import axios from 'axios'
+  import qs from 'qs'
 
-export default {
+  export default {
     name: 'multiline',
-    data(){
-        return  {
-            myChart : '',
-            showHost: this.$defaultShowHost,   // default
-            // id_name : 'gauge1',
-            showdate: [],
-            showdata: []
-        }
+    data() {
+      return {
+        myChart: '',
+        showHost: this.$defaultShowHost,   // default
+        // id_name : 'gauge1',
+        showdate: [],
+        showdata: []
+      }
     },
     props: [
       'initMetricList',
-      'echartsid'  
+      'echartsid'
     ],
-    watch:{
-        showdata: {
-            handler(){
-                this.chart.setOption(this.getOption());
-                this.chart.hideLoading();
-            }
-        },
-        showHost: {
-            handler(){
-                console.log('show host changed')
-                this.getDataInit()
-                this.chart.setOption(this.getOption());
-                this.chart.hideLoading();                
-            }
+    watch: {
+      showdata: {
+        handler() {
+          this.chart.setOption(this.getOption());
+          this.chart.hideLoading();
         }
+      },
+      showHost: {
+        handler() {
+          console.log('show host changed')
+          this.getDataInit()
+          this.chart.setOption(this.getOption());
+          this.chart.hideLoading();
+        }
+      }
     },
     methods: {
-        getOption(){
-            let option = {
-                    title: {
-                        text: this.getTitle()
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data: this.initMetricList
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    toolbox: {
-                      feature: {
-                          restore: {},
-                          saveAsImage: {}
-                      }
-                    },
-                    xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: this.showdate
-                    },
-                    yAxis: this.getYaxis(),
-                    series: this.showdata
-            };
-            return option
-        },
-        getTitle(){
-            let markArray = this.initMetricList[0].split(".", 2)
-            return this.showHost + ":" +markArray[0] + '.' + markArray[1]
-        },
-        getYaxis(){
-          let args = this.initMetricList[0].split('.')
-          if (args[args.length-1] === 'percent' || args[3] === 'percent'){
-            return {
-              type : 'value',
-              axisLabel : {
-                formatter: '{value} %'
-              }
-            }
-          }
-          else if (args[0] == 'mem'){
-            return {
-              type : 'value',
-              axisLabel : {
-                formatter: '{value} M'
-              }
-            }
-          }else{
-            return {
-              type : 'value',
-              axisLabel : {
-                formatter: '{value}'
-              }
-            }
-          }
+      counterDiff(arr) {
+        let arrTmp = arr.slice(1, arr.length + 1);
+        let res = [];
+        for (let i = 0; i < arrTmp.length; i++) {
+          res[i] = arrTmp[i] - arr[i]
+        }
+        return res
       },
-        dateFormat (t1) {
-            var newDate = new Date();
-            newDate.setTime(t1 * 1000);
-            return [
-              newDate.getFullYear(), 
-              newDate.getMonth()+1,     // 这是个坑....
-              newDate.getDate()
-              ].join("/")+' '+ [
-              newDate.getHours(), 
-              newDate.getMinutes()].join(':');
-        },
-        getUserChartInit() {
-            this.getDataInit()
-
-            this.chart = echarts.init(document.getElementById(this.echartsid));
-            this.chart.showLoading()
-            this.chart.setOption(this.getOption());
-            this.chart.hideLoading();
-        },
-        getDataInit(){
-            this.showdata = []
-            this.showdate = []
-
-            let e_time = new Date();
-            let s_time = new Date();
-            s_time.setTime(e_time.getTime() - 3600 * 1000 * 6);
-            for (let metric_name of this.initMetricList){
-                let req_data = {
-                    endpoint: this.showHost,
-                    metric: metric_name,
-                    s_time: Date.parse(s_time)/ 1000,
-                    e_time: Date.parse(e_time)/ 1000
-                }
-                let req_info = qs.stringify(req_data);
-
-                axios.post('http://' + this.$apiHost + '/monitor/v1/items', req_info,
-                    {
-                        headers:{
-                            'Content-type': 'application/x-www-form-urlencoded',
-                            'Accept': '*/*'
-                        }
-                    })
-                .then((res) => {
-                    this.showdata.push({
-                        name: metric_name,
-                        type:'line',
-                        data: this.genShowData(metric_name, res.data)
-                    });
-                })
-                .catch((err)=>{
-                    console.log(err)
-                })
+      getOption() {
+        let option = {
+          title: {
+            text: this.getTitle()
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: this.initMetricList
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          toolbox: {
+            feature: {
+              restore: {},
+              saveAsImage: {}
             }
-        },
-        genShowData(metric_name, data){
-            let rData = [];
-            for (var obj of data) {
-                rData.push(this.getDataFormater(metric_name, obj.value));
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: this.showdate
+          },
+          yAxis: this.getYaxis(),
+          series: this.showdata
+        };
+        return option
+      },
+      getTitle() {
+        let markArray = this.initMetricList[0].split(".", 2)
+        return this.showHost + ":" + markArray[0] + '.' + markArray[1]
+      },
+      getYaxis() {
+        let args = this.initMetricList[0].split('.')
+        if (args[args.length - 1] === 'percent' || args[3] === 'percent') {
+          return {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value} %'
             }
-            if (this.showdate.length == 0){
-                for (var obj of data) {
-                    this.showdate.push(this.dateFormat(obj.timestamp));
-                }    
-            }
-            return rData;
-        },getDataFormater(metric_name, data){
-          let args = metric_name.split('.')
-          let metricType = args[0]
-          let percent = args[args.length-1]
-          if (metricType == 'mem' && percent !== 'percent'){
-            return Math.floor(data/1024/1024)
-          }else{
-            return data
           }
-        },
-        // eventHandler
-        toggleEventHandler(formData){
-            this.showdate = []
-            this.showdata = []
-            this.showHost = formData.chosedhost
-        },
+        }
+        else if (args[0] == 'net' && args[1] == 'dev' && args[2] == 'bytes') {
+          return {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value} kb'
+            }
+          }
+        } else if (args[0] == 'mem') {
+          return {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value} M'
+            }
+          }
+        } else {
+          return {
+            type: 'value',
+            axisLabel: {
+              formatter: '{value}'
+            }
+          }
+        }
+      },
+      dateFormat(t1) {
+        let newDate = new Date();
+        newDate.setTime(t1 * 1000);
+        return [
+          newDate.getFullYear(),
+          newDate.getMonth() + 1,     // 这是个坑....
+          newDate.getDate()
+        ].join("/") + ' ' + [
+          newDate.getHours(),
+          newDate.getMinutes()].join(':');
+      },
+      getUserChartInit() {
+        this.getDataInit();
+
+        this.chart = echarts.init(document.getElementById(this.echartsid));
+        this.chart.showLoading();
+        this.chart.setOption(this.getOption());
+        this.chart.hideLoading();
+      },
+      getDataInit() {
+        this.showdata = [];
+        this.showdate = [];
+
+        let e_time = new Date();
+        let s_time = new Date();
+        s_time.setTime(e_time.getTime() - 3600 * 1000 * 6);
+        for (let metric_name of this.initMetricList) {
+          let req_data = {
+            endpoint: this.showHost,
+            metric: metric_name,
+            s_time: Date.parse(s_time) / 1000,
+            e_time: Date.parse(e_time) / 1000
+          };
+          let req_info = qs.stringify(req_data);
+
+          axios.post('http://' + this.$apiHost + '/monitor/v1/items', req_info,
+            {
+              headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+                'Accept': '*/*'
+              }
+            })
+            .then((res) => {
+              this.showdata.push({
+                name: metric_name,
+                type: 'line',
+                data: this.genShowData(metric_name, res.data)
+              });
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      },
+      genShowData(metric_name, data) {
+        let resData = [];
+        let dataValueArray = data.map(function (x) {
+          return x.value
+        })
+        let itemType = data[0].counterType
+        console.log(itemType)
+        if (itemType == 'COUNTER') {
+          dataValueArray = this.counterDiff(dataValueArray)
+        }
+
+        let args = metric_name.split('.')
+        let metricType = args[0]
+        let percent = args[args.length - 1]
+        if (metricType == 'mem' && percent !== 'percent') {
+          resData = dataValueArray.map(function (x) {
+              return Math.floor(x / 1024 / 1024)
+            }
+          )
+        } else if (metric_name.includes('net.dev.bytes')) {
+          resData = dataValueArray.map(function (x) {
+              return Math.floor(x / 1000)
+            }
+          )
+        }
+        else {
+          resData = dataValueArray
+        }
+
+        if (this.showdate.length == 0) {
+          for (var obj of data) {
+            this.showdate.push(this.dateFormat(obj.timestamp));
+          }
+        }
+        return resData;
+      },
+      // eventHandler
+      toggleEventHandler(formData) {
+        this.showdate = []
+        this.showdata = []
+        this.showHost = formData.chosedhost
+      },
     },
-    mounted () {
+    mounted() {
       this.$nextTick(function () {
         this.getUserChartInit();
       })
     },
     created() {
-        this.$bus1.$on('toggle-event', this.toggleEventHandler)
+      this.$bus.$on('toggle-event', this.toggleEventHandler)
     },
     beforeDestroy() {
-      this.$bus1.$off('toggle-event', this.handleMyEvent)
+      this.$bus.$off('toggle-event', this.handleMyEvent)
     }
 
-}
+  }
 
 </script>
 

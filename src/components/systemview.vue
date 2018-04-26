@@ -1,5 +1,5 @@
 <template>
-    <div class="chart-container">
+  <div class="chart-container">
 
     <el-row>
       <el-col :span="6">
@@ -14,8 +14,6 @@
       <el-col :span="6">
         <gauge :metric-name="initGaugeMetricList[3]" guageid="dfgaugeechart"></gauge>
       </el-col>
-
-
     </el-row>
 
 
@@ -33,13 +31,19 @@
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initCpuMetricList"  echartsid="cpuecharts"></multiline>
+        <multiline :init-metric-list="initCpuMetricList" echartsid="cpuecharts"></multiline>
       </el-col>
     </el-row>
 
     <el-row>
-    <el-col :span="24">
-        <multiline :init-metric-list="initMemMetricList"  echartsid="memecharts"></multiline>
+      <el-col :span="24">
+        <multiline :init-metric-list="initMemMetricList" echartsid="memecharts"></multiline>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :span="24">
+        <multiline :init-metric-list="initNetDevMetricList" echartsid="netdevecharts"></multiline>
       </el-col>
     </el-row>
 
@@ -48,57 +52,59 @@
 </template>
 
 <script>
-import gauge from './gauge'
-import multiline from './multiline'
+  import gauge from './gauge'
+  import multiline from './multiline'
 
 
-export default {
+  export default {
     name: 'systemview',
-    data () {
-        return {
-            initGaugeMetricList: [
-                "system.load.1min",
-                "system.load.avg.5min",
-                "system.load.avg.15min",
-                'df.bytes.used.percent./',
-            ],
-            initCpuMetricList: [
-                "cpu.system.percent",
-                "cpu.user.percent",
-                "cpu.iowait.percent",
-                "cpu.idle.percent",
-            ],
-            initMemMetricList : [
-                "mem.virtual.used",
-                "mem.virtual.cached",
-                "mem.virtual.available",
-                "mem.virtual.buffers",
-                "mem.virtual.free"
-            ],
-            initLoadMetricList: [
-                "system.load.avg.1min/core",
-            ],
-            initNetMetricList: [
-                // "net.conn.syn_recv",
-                "net.conn.established",
-                "net.conn.time_wait",
-                "net.conn.syn_recv"
-            ]
-        }
+    data() {
+      return {
+        initGaugeMetricList: [
+          "system.load.1min",
+          "system.load.avg.5min",
+          "system.load.avg.15min",
+          'df.bytes.used.percent./',
+        ],
+        initCpuMetricList: [
+          "cpu.system.percent",
+          "cpu.user.percent",
+          "cpu.iowait.percent",
+          "cpu.idle.percent",
+        ],
+        initMemMetricList: [
+          "mem.virtual.used",
+          "mem.virtual.cached",
+          "mem.virtual.available",
+          "mem.virtual.buffers",
+          "mem.virtual.free"
+        ],
+        initLoadMetricList: [
+          "system.load.avg.1min/core",
+        ],
+        initNetMetricList: [
+          // "net.conn.syn_recv",
+          "net.conn.established",
+          "net.conn.time_wait",
+          "net.conn.syn_recv"
+        ],
+        initNetDevMetricList: [
+          "net.dev.bytes.sent." + this.$defaultShowNetDev,
+          "net.dev.bytes.receive." + this.$defaultShowNetDev
+        ]
+      }
     },
     components: {
-        gauge,
-        multiline
+      gauge,
+      multiline
     },
-    methods: {
-        
-    },
-        
-}
+    methods: {},
+
+  }
 </script>
 
 <style>
- .el-row{
-     height: 100px;
- }
+  .el-row {
+    height: 100px;
+  }
 </style>

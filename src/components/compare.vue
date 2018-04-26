@@ -1,16 +1,16 @@
 <template>
-      <el-main>
+  <el-main>
 
-        <searchform/>
-        <!-- 展示组件 -->
+    <searchform/>
+    <!-- 展示组件 -->
 
-            <el-row>
-                <el-col :span="24">
-                    <multihost echartsid="mutihostcharts"></multihost>
-                </el-col>
-            </el-row>
+    <el-row>
+      <el-col :span="24">
+        <multihost echartsid="mutihostcharts"></multihost>
+      </el-col>
+    </el-row>
 
-      </el-main>
+  </el-main>
 </template>
 
 <style>
@@ -27,25 +27,25 @@
   .el-main {
     width: 100%
   }
-  .span{
-    font-family: "Helvetica Neue",
+
+  .span {
+    font-family: "Helvetica Neue";
   }
 </style>
 
 <script>
-import searchform from './searchform'
-import multihost from './multihost'
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+  import searchform from './searchform'
+  import multihost from './multihost'
+  // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   export default {
     name: 'compare',
     data() {
-      return {
-      }
+      return {}
     },
     components: {
       searchform,
       multihost
-  },
-};
+    },
+  };
 </script>
