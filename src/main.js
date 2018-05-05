@@ -13,6 +13,7 @@ import overview from './components/overview'
 import compare from './components/compare'
 import datamanage from './components/datamanage'
 import usermanage from './components/usermanage'
+import login from './components/login'
 
 Vue.config.productionTip = false;
 
@@ -21,11 +22,11 @@ Vue.use(VRouter);
 
 Vue.prototype.$bus = new Vue();
 Vue.prototype.$apiHost = 'localhost:11111';
-Vue.prototype.$defaultShowHost = 'newbie-unknown85824.i.nease.net';
+Vue.prototype.$defaultShowHost = 'newbie-unknown85822.i.nease.net';
 Vue.prototype.$defaultShowNetDev = 'eth0';
 
 let router = new VRouter({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -55,6 +56,11 @@ let router = new VRouter({
       path: '/usermanage',
       name: 'usermanage',
       component: usermanage
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
     }]
 });
 
@@ -62,7 +68,6 @@ new Vue({
   el: '#app',
   router,
   components: {App},
-  // template: '<App/>',
   render: h => h(App)
 });
 

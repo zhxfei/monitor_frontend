@@ -130,34 +130,44 @@
                :visible.sync="dialogUserAddVisible"
                width="500px">
 
-      <el-form ref="form" :model="userAddForm" label-width="80px">
+      <el-form ref="userAddForm" :model="userAddForm" label-width="80px" :rules="rulesForAdd">
 
         <el-form-item
           label="用户名"
-          required>
+          required
+          prop="username">
           <el-input v-model="userAddForm.username"></el-input>
         </el-form-item>
 
         <el-form-item
           label="登录名"
-          required>
+          required
+          prop="login_name">
           <el-input v-model="userAddForm.login_name"></el-input>
         </el-form-item>
 
         <el-form-item
           label="密码"
+          required
+          prop="password">
+          <el-input type="password" auto-complete="off" v-model="userAddForm.password"></el-input>
+        </el-form-item>
+
+
+        <el-form-item
+          label="is admin"
           required>
-          <el-input v-model="userAddForm.password"></el-input>
+          <el-switch
+            v-model="userAddForm.admin"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
         </el-form-item>
 
-
-        <el-form-item label="is admin"
-                      required>
-          <el-switch v-model="userAddForm.admin"></el-switch>
-        </el-form-item>
-
-        <el-form-item label="email"
-                      required>
+        <el-form-item
+          label="email"
+          required
+          prop="email">
           <el-input v-model="userAddForm.email"></el-input>
         </el-form-item>
 
@@ -199,7 +209,7 @@
         form: {
           user_id: "",
           username: "",
-          admin: "",
+          admin: false,
           email: "",
           phone: "",
           comments: ""
@@ -208,10 +218,26 @@
           login_name: "",
           password:"",
           username: "",
-          admin: "",
+          admin: false,
           email: "",
           phone: "",
           comments: ""
+        },
+        rulesForAdd: {
+          login_name: [
+            { required: true, message: '请输入登录名', trigger: 'change' },
+            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'change' }
+          ],
+          password: [
+            { required: true, message: '请输入登录密码', trigger: 'change' },
+            { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'change' }
+          ],
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'change' }
+          ],
+          email: [
+            {type: "email", required: true},
+          ],
         },
 
         formLabelWidth: "200px"
@@ -276,35 +302,38 @@
         this.dialogShowChange('add');
       },
       handleAddSure(){
-        this.dialogShowChange('add');
-        console.log(this.userAddForm);
 
-        let req_info = qs.stringify(this.userAddForm);
-
-        axios.post('http://' + this.$apiHost + '/monitor/v1/users', req_info,
-          {
-            headers: {
-              'Content-type': 'application/x-www-form-urlencoded',
-              'Accept': '*/*'
-            }
-          })
-          .then((res) => {
-            this.$notify({
-              title: "成功",
-              message: "添加用户 " + this.userAddForm.username + " 成功",
-              type: "success"
-            });
-            this.tableSync()
-          })
-          .catch((err) => {
-            this.$notify({
-              title: "失败",
-              message: "添加用户 " + this.userAddForm.username + " 失败",
-              type: "error"
-            });
-            console.log(err)
-          })
-
+        this.$refs.userAddForm.validate((valid) => {
+          if (valid) {
+            let req_info = qs.stringify(this.userAddForm);
+            this.dialogShowChange('add');
+            axios.post('http://' + this.$apiHost + '/monitor/v1/users', req_info,
+              {
+                headers: {
+                  'Content-type': 'application/x-www-form-urlencoded',
+                  'Accept': '*/*'
+                }
+              })
+              .then((res) => {
+                this.$notify({
+                  title: "成功",
+                  message: "添加用户 " + this.userAddForm.username + " 成功",
+                  type: "success"
+                });
+                this.tableSync()
+              })
+              .catch((err) => {
+                this.$notify({
+                  title: "失败",
+                  message: "添加用户 " + this.userAddForm.username + " 失败",
+                  type: "error"
+                });
+                console.log(err)
+              })
+          } else {
+            console.log('error submit!!');
+          }
+        });
       },
       dialogShowChange(type) {
         if (type === 'edit'){

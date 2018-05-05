@@ -34,10 +34,8 @@
       },
       showHost: {
         handler() {
-          console.log('show host changed')
-          this.getDataInit()
-          this.chart.setOption(this.getOption());
-          this.chart.hideLoading();
+          console.log('show host changed');
+          this.getDataInit();
         }
       }
     },
@@ -84,11 +82,11 @@
         return option
       },
       getTitle() {
-        let markArray = this.initMetricList[0].split(".", 2)
+        let markArray = this.initMetricList[0].split(".", 2);
         return this.showHost + ":" + markArray[0] + '.' + markArray[1]
       },
       getYaxis() {
-        let args = this.initMetricList[0].split('.')
+        let args = this.initMetricList[0].split('.');
         if (args[args.length - 1] === 'percent' || args[3] === 'percent') {
           return {
             type: 'value',
@@ -97,14 +95,14 @@
             }
           }
         }
-        else if (args[0] == 'net' && args[1] == 'dev' && args[2] == 'bytes') {
+        else if (args[0] === 'net' && args[1] === 'dev' && args[2] === 'bytes') {
           return {
             type: 'value',
             axisLabel: {
               formatter: '{value} kb'
             }
           }
-        } else if (args[0] == 'mem') {
+        } else if (args[0] === 'mem') {
           return {
             type: 'value',
             axisLabel: {
@@ -163,14 +161,22 @@
               }
             })
             .then((res) => {
-              this.showdata.push({
-                name: metric_name,
-                type: 'line',
-                data: this.genShowData(metric_name, res.data)
-              });
+              if (res.data.length !== 0){
+                this.showdata.push({
+                  name: metric_name,
+                  type: 'line',
+                  data: this.genShowData(metric_name, res.data)
+                });
+              } else {
+              }
             })
             .catch((err) => {
-              console.log(err)
+              console.log(err);
+              this.$notify({
+                title: "错误",
+                message: "数据加载错误",
+                type: "warning"
+              });
             })
         }
       },
@@ -178,17 +184,17 @@
         let resData = [];
         let dataValueArray = data.map(function (x) {
           return x.value
-        })
-        let itemType = data[0].counterType
-        console.log(itemType)
-        if (itemType == 'COUNTER') {
+        });
+        let itemType = data[0].counterType;
+        console.log(itemType);
+        if (itemType === 'COUNTER') {
           dataValueArray = this.counterDiff(dataValueArray)
         }
 
-        let args = metric_name.split('.')
-        let metricType = args[0]
-        let percent = args[args.length - 1]
-        if (metricType == 'mem' && percent !== 'percent') {
+        let args = metric_name.split('.');
+        let metricType = args[0];
+        let percent = args[args.length - 1];
+        if (metricType === 'mem' && percent !== 'percent') {
           resData = dataValueArray.map(function (x) {
               return Math.floor(x / 1024 / 1024)
             }
@@ -203,8 +209,8 @@
           resData = dataValueArray
         }
 
-        if (this.showdate.length == 0) {
-          for (var obj of data) {
+        if (this.showdate.length === 0) {
+          for (let obj of data) {
             this.showdate.push(this.dateFormat(obj.timestamp));
           }
         }
@@ -212,8 +218,8 @@
       },
       // eventHandler
       toggleEventHandler(formData) {
-        this.showdate = []
-        this.showdata = []
+        this.showdate = [];
+        this.showdata = [];
         this.showHost = formData.chosedhost
       },
     },
