@@ -9,7 +9,7 @@
 
       </el-main>
 
-  
+
 </template>
 
 <style>
@@ -27,14 +27,14 @@
     width: 100%
   }
   .span{
-    font-family: "Helvetica Neue",
+    font-family: "Helvetica Neue";
   }
 </style>
 
 <script>
   import hostform from './searchform'
   import itemshow from './historysearch'
-  // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
   export default {
     name: 'datasearch',
     data() {

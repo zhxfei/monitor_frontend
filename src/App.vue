@@ -30,6 +30,7 @@
           <i class="el-icon-setting" style="margin-right: 15px"></i>
         <span>Ease Monitor</span>
         <br>
+
       </el-header>
 
           <transition>
