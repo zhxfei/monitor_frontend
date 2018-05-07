@@ -29,6 +29,23 @@ new Vue({
   axios,
   store,
   components: {App},
-  render: h => h(App)
+  render: h => h(App),
+
+  // watch:{
+  //   "$router" : 'checkLogin'
+  // },
+  // created() {
+  //   this.checkLogin();
+  // },
+  // methods:{
+  //   checkLogin(){
+  //     //检查是否存在session
+  //     if(store.state.token === null){
+  //       this.$router.push('/login');
+  //     }else{
+  //       // this.$router.push('/');
+  //     }
+  //   }
+  // }
 });
 
