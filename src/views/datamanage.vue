@@ -28,7 +28,7 @@
 </style>
 
 <script>
-  import searchform from './searchform'
+  import searchform from '../components/searchform'
   import axios from 'axios'
   import qs from 'qs'
 

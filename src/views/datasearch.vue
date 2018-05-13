@@ -32,8 +32,8 @@
 </style>
 
 <script>
-  import hostform from './searchform'
-  import itemshow from './historysearch'
+  import hostform from '../components/searchform'
+  import itemshow from '../components/historysearch'
 
   export default {
     name: 'datasearch',

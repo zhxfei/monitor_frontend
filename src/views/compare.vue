@@ -34,8 +34,8 @@
 </style>
 
 <script>
-  import searchform from './searchform'
-  import multihost from './multihost'
+  import searchform from '../components/searchform'
+  import multihost from '../components/multihost'
   // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   export default {

@@ -7,72 +7,90 @@ import VueRouter from 'vue-router'
 import store from './store/store'
 import * as types from './store/types'
 
-import datasearch from './components/datasearch'
-import overview from './components/overview'
-import compare from './components/compare'
-import datamanage from './components/datamanage'
-import usermanage from './components/usermanage'
-import login from './components/login'
+import datasearch from './views/datasearch'
+import overview from './views/overview'
+import compare from './views/compare'
+import datamanage from './views/datamanage'
+import usermanage from './views/usermanage'
+import login from './views/login'
+import police from './views/police'
 
 Vue.use(VueRouter)
 
 
-
 const routes = [
-    {
-      path: '/',
-      redirect: overview
+  {
+    path: '/',
+    redirect: datasearch
+  },
+  {
+    path: '/overview',
+    name: 'overview',
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/overview',
-      name: 'overview',
-      meta: {
-        requireAuth: true,
-      },
-      component: overview
+    component: overview
+  },
+  {
+    path: '/datasearch',
+    name: 'datasearch',
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/datasearch',
-      name: 'datasearch',
-      meta: {
-        requireAuth: true,
-      },
-      component: datasearch
+    component: datasearch
+  },
+  {
+    path: '/compare',
+    name: 'compare',
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/compare',
-      name: 'compare',
-      meta: {
-        requireAuth: true,
-      },
-      component: compare
+    component: compare
+  },
+  {
+    path: '/datamanage',
+    name: 'datamanage',
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/datamanage',
-      name: 'datamanage',
-      meta: {
-        requireAuth: true,
-      },
-      component: datamanage
+    component: datamanage
+  },
+  {
+    path: '/usermanage',
+    name: 'usermanage',
+    component: usermanage,
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/usermanage',
-      name: 'usermanage',
-      component: usermanage,
-      meta: {
-        requireAuth: true,
-      },
+  },
+  {
+    path: '/police',
+    name: 'police',
+    component: police,
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: login
-    }];
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: login
+  }];
 
 
 // 页面刷新时，重新赋值token
 if (window.localStorage.getItem('token')) {
+  // let data = window.localStorage.getItem('user')
+  // console.log(data)
+  // if (typeof data === 'string') {
+  //   store.commit(types.USER, JSON.parse(data))
+  // }
   store.commit(types.LOGIN, window.localStorage.getItem('token'))
+}
+
+if (window.localStorage.getItem('user')) {
+  let userData = JSON.parse(window.localStorage.getItem('user'))
+  store.commit(types.USER, userData)
 }
 
 const router = new VueRouter({
@@ -81,7 +99,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(r => r.meta.requireAuth)) {
-    console.log(store.state.token)
     if (store.state.token) {
       next();
     }

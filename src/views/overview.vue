@@ -29,8 +29,8 @@
 </style>
 
 <script>
-  import toggleform from './toggleform'
-  import systemview from './systemview'
+  import toggleform from '../components/toggleform'
+  import systemview from '../components/systemview'
   // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
   export default {

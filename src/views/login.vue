@@ -1,6 +1,6 @@
 <template>
   <div>
-  <h1>Login Component</h1>
+  <h1><span @click="changeDialogShow">Login Component</span></h1>
   <el-dialog title="登录"
              :visible.sync="dialogUserLogin"
              width="500px">
@@ -62,6 +62,9 @@
       };
     },
     methods: {
+      changeDialogShow(){
+        this.dialogUserLogin = !this.dialogUserLogin
+      },
       handleLogin(){
 
         this.$refs.rulesUserLogin.validate((valid) => {
