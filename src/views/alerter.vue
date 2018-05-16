@@ -7,35 +7,25 @@
 
 
       <el-table-column
-        label="strategy_id"
+        label="alerter_id"
         align="center"
         v-if="loading">
         <template slot-scope="scope">
           <i class="el-icon-admin"></i>
-          <span style="text-align:center">{{ scope.row.strategy_id }}</span>
+          <span style="text-align:center">{{ scope.row.alerter_id }}</span>
         </template>
       </el-table-column>
 
 
       <el-table-column
-        label="策略名称"
-        align="center">
-        <template slot-scope="scope">
-          <!--<i class="el-icon-phone"></i>-->
-          <span style="text-align:center">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-
-
-      <el-table-column
-        label="指标名称"
+        label="alerter 名称"
         align="center">
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
-            <p>指标: {{ scope.row.metrics }}</p>
+            <p>名称: {{ scope.row.name }}</p>
             <p>创建者: {{ scope.row.creator }}</p>
             <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.metrics }}</el-tag>
+              <el-tag size="medium">{{ scope.row.name }}</el-tag>
             </div>
           </el-popover>
         </template>
@@ -51,20 +41,19 @@
       </el-table-column>
 
       <el-table-column
-        label="表达式"
+        label="类型"
         align="center">
         <template slot-scope="scope">
-          <i class="el-icon-admin"></i>
-          <span style="text-align:center">{{ scope.row.condition }}</span>
+          <i class="el-icon-email"></i>
+          <span style="text-align:center">{{ scope.row.type }}</span>
         </template>
       </el-table-column>
 
       <el-table-column
-        label="指标等级"
+        label="发送给用户"
         align="center">
         <template slot-scope="scope">
-          <!--<i class="el-icon-message"></i>-->
-          <span style="text-align:center">{{ scope.row.grade }}</span>
+          <span style="text-align:center">{{ getUsername(scope.row.to_persons) }}</span>
         </template>
       </el-table-column>
 
@@ -87,76 +76,76 @@
     </el-table>
     <br>
     <br>
-    <el-button @click="addUser">添加Strategy</el-button>
+    <el-button @click="addUser">添加Alerter</el-button>
 
 
-    <el-dialog title="Strategy Edit"
+    <el-dialog title="Alerter Edit"
                :visible.sync="dialogFormVisible"
                width="600px">
 
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item
-          label="Strategy name"
+          label="Alerter name"
           required>
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="item name"
+        <el-form-item label="Alerter type"
                       required>
-          <el-input v-model="form.metrics"></el-input>
+          <el-input v-model="form.type"></el-input>
         </el-form-item>
 
-        <el-form-item label="condition"
+        <el-form-item label="to_persons"
                       required>
-          <el-input v-model="form.condition"></el-input>
-        </el-form-item>
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group v-model="form.to_persons">
+            <el-checkbox v-for="user in userAll" :label="user.user_id" :key="user.user_id">{{user.username}}
+            </el-checkbox>
+          </el-checkbox-group>
 
-        <el-form-item label="grade">
-          <el-input v-model="form.grade"></el-input>
         </el-form-item>
 
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleEditSure">确 定</el-button>
       </div>
-
     </el-dialog>
 
-
-    <el-dialog title="添加Strategy"
+    <el-dialog title="添加Alerter"
                :visible.sync="dialogUserAddVisible"
                width="600px">
 
       <el-form ref="userAddForm" :model="userAddForm" label-width="120px" :rules="rulesForAdd">
 
         <el-form-item
-          label="Strategy name"
+          label="Alerter name"
           required>
           <el-input v-model="userAddForm.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="item name"
+        <el-form-item label="Alerter type"
                       required>
-          <el-input v-model="userAddForm.metrics"></el-input>
+          <el-input v-model="userAddForm.type"></el-input>
         </el-form-item>
 
-        <el-form-item label="condition"
+        <el-form-item label="to_persons"
                       required>
-          <el-input v-model="userAddForm.condition"></el-input>
+
+          <div style="margin: 15px 0;"></div>
+          <el-checkbox-group v-model="userAddForm.to_persons">
+            <el-checkbox v-for="user in userAll" :label="user.user_id" :key="user.user_id">
+              {{ user.username }}
+            </el-checkbox>
+          </el-checkbox-group>
+
         </el-form-item>
 
-        <el-form-item label="grade">
-          <el-input v-model="userAddForm.grade"></el-input>
-        </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogUserAddVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleAddSure">确 定</el-button>
       </div>
-
     </el-dialog>
 
   </div>
@@ -164,11 +153,11 @@
 
 
 <script>
-  import qs from "qs";
   import axios from "axios";
+  import conf from "../config"
 
   export default {
-    name: "strategy",
+    name: "alerter",
     data() {
       return {
         tableData: [],
@@ -176,17 +165,15 @@
         dialogUserAddVisible: false,
         loading: true,
         form: {
-          strategy_id: "",
+          alerter_id: "",
           name: "",
-          metrics: "",
-          condition: "",
-          grade: "",
+          type: "",
+          to_persons: [],
         },
         userAddForm: {
           name: "",
-          metrics: "",
-          condition: "",
-          grade: "",
+          type: "",
+          to_persons: [],
         },
         rulesForAdd: {
           name: [
@@ -201,33 +188,38 @@
             {required: true, message: '请输入用户名', trigger: 'change'}
           ],
         },
-
-        formLabelWidth: "200px"
+        formLabelWidth: "200px",
+        isIndeterminate: true
       };
+    },
+    computed: {
+      userAll() {
+        console.log(this.$store.state.usersTable)
+        return this.$store.state.usersTable
+      }
     },
     methods: {
       handleEdit(index, row) {
         this.dialogShowChange('edit');
-        (this.form.strategy_id = row.strategy_id),
+        (this.form.alerter_id = row.alerter_id),
           (this.form.name = row.name),
-          (this.form.metrics = row.metrics),
-          (this.form.condition = row.condition),
-          (this.form.grade = row.grade);
+          (this.form.type = row.type),
+          (this.form.to_persons = row.to_persons);
       },
       handleEditSure() {
         this.dialogShowChange('edit');
-        let req_info = qs.stringify(this.form);
+        let req_info = JSON.stringify(this.form);
         axios
-          .put("http://" + this.$apiHost + "/monitor/v1/strategy/" + this.form.strategy_id, req_info, {
+          .put("http://" + conf.apiHost + "/monitor/v1/alert/" + this.form.alerter_id, req_info, {
             headers: {
-              "Content-type": "application/x-www-form-urlencoded",
+              "Content-type": "application/json",
               Accept: "*/*"
             }
           })
           .then(res => {
             this.$notify({
               title: "成功",
-              message: "Strategy " + res.data.name + " 信息更新成功",
+              message: "Alerter " + res.data.name + " 信息更新成功",
               type: "success"
             });
             this.tableSync();
@@ -243,13 +235,13 @@
       handleDelete(index, row) {
         console.log(index, row);
         axios
-          .delete("http://" + this.$apiHost + "/monitor/v1/strategy/" + row.strategy_id, {
+          .delete("http://" + conf.apiHost + "/monitor/v1/alert/" + row.alerter_id, {
             headers: {"Content-Type": "application/x-www-form-urlencoded"}
           })
           .then(res => {
             this.$notify({
               title: "成功",
-              message: "删除Strategy " + row.name + " 成功",
+              message: "删除Alerter " + row.name + " 成功",
               type: "success"
             });
             this.tableSync()
@@ -258,7 +250,7 @@
             console.log(err);
             this.$notify({
               title: "失败",
-              message: "删除Strategy " + row.name + " 失败",
+              message: "删除Alerter " + row.name + " 失败",
               type: "error"
             });
           });
@@ -267,22 +259,21 @@
         this.dialogShowChange('add');
       },
       handleAddSure() {
-
         this.$refs.userAddForm.validate((valid) => {
           if (valid) {
-            let req_info = qs.stringify(this.userAddForm);
+            let req_info = JSON.stringify(this.userAddForm);
             this.dialogShowChange('add');
-            axios.post('http://' + this.$apiHost + '/monitor/v1/strategies', req_info,
+            axios.post('http://' + conf.apiHost + '/monitor/v1/alerts', req_info,
               {
                 headers: {
-                  'Content-type': 'application/x-www-form-urlencoded',
+                  'Content-type': 'application/json',
                   'Accept': '*/*'
                 }
               })
               .then((res) => {
                 this.$notify({
                   title: "成功",
-                  message: "添加Strategy " + this.userAddForm.name + " 成功",
+                  message: "添加Alerter " + this.userAddForm.name + " 成功",
                   type: "success"
                 });
                 this.tableSync()
@@ -290,7 +281,7 @@
               .catch((err) => {
                 this.$notify({
                   title: "失败",
-                  message: err.message.grade,
+                  message: err.message.to_persons,
                   type: "error"
                 });
               })
@@ -308,7 +299,7 @@
       },
       tableSync() {
         axios
-          .get("http://" + this.$apiHost + "/monitor/v1/strategies", {
+          .get("http://" + this.$apiHost + "/monitor/v1/alerts", {
             headers: {"Content-Type": "application/x-www-form-urlencoded"}
           })
           .then(res => {
@@ -331,6 +322,15 @@
           .catch(err => {
             console.log(err);
           });
+      },
+      getUsername(idList) {
+        let res = [];
+        for (let user of this.userAll) {
+          if (idList.indexOf(user.user_id) !== -1) {
+            res.push(user.username)
+          }
+        }
+        return res
       }
     },
     mounted() {

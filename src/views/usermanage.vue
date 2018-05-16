@@ -216,7 +216,7 @@
         },
         userAddForm: {
           login_name: "",
-          password:"",
+          password: "",
           username: "",
           admin: false,
           email: "",
@@ -225,15 +225,15 @@
         },
         rulesForAdd: {
           login_name: [
-            { required: true, message: '请输入登录名', trigger: 'change' },
-            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'change' }
+            {required: true, message: '请输入登录名', trigger: 'change'},
+            {min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'change'}
           ],
           password: [
-            { required: true, message: '请输入登录密码', trigger: 'change' },
-            { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'change' }
+            {required: true, message: '请输入登录密码', trigger: 'change'},
+            {min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'change'}
           ],
           username: [
-            { required: true, message: '请输入用户名', trigger: 'change' }
+            {required: true, message: '请输入用户名', trigger: 'change'}
           ],
           email: [
             {type: "email", required: true},
@@ -298,10 +298,10 @@
             });
           });
       },
-      addUser(){
+      addUser() {
         this.dialogShowChange('add');
       },
-      handleAddSure(){
+      handleAddSure() {
 
         this.$refs.userAddForm.validate((valid) => {
           if (valid) {
@@ -336,9 +336,9 @@
         });
       },
       dialogShowChange(type) {
-        if (type === 'edit'){
+        if (type === 'edit') {
           this.dialogFormVisible = !this.dialogFormVisible;
-        }else{
+        } else {
           this.dialogUserAddVisible = !this.dialogUserAddVisible;
         }
       },
@@ -348,7 +348,9 @@
             headers: {"Content-Type": "application/x-www-form-urlencoded"}
           })
           .then(res => {
+
             this.tableData = res.data;
+            console.log(this.tableData);
             this.tableData.map(function (columnData) {
               let date = new Date(columnData.add_time * 1000);
               let Y = date.getFullYear() + "-";
@@ -368,6 +370,23 @@
             console.log(err);
           });
       }
+      // tableSync() {
+      //   this.tableData = this.$store.state.usersTable;
+      //   this.tableData.map(function (columnData) {
+      //     let date = new Date(columnData.add_time * 1000);
+      //     let Y = date.getFullYear() + "-";
+      //     let M =
+      //       (date.getMonth() + 1 < 10
+      //         ? "0" + (date.getMonth() + 1)
+      //         : date.getMonth() + 1) + "-";
+      //     let D = date.getDate() + " ";
+      //     let h = date.getHours() + ":";
+      //     let m = date.getMinutes() + ":";
+      //     let s = date.getSeconds();
+      //     columnData.add_time = Y + M + D + h + m + s;
+      //     return columnData;
+      //   });
+      // }
     },
     mounted() {
       this.tableSync();

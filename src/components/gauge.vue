@@ -73,7 +73,7 @@
         let req_data = {
           endpoint: this.showHost,
           metric: this.metricName,
-          s_time: Date.parse(n_time) / 1000,
+          s_time: Date.parse(n_time) / 1000 - 60,
           e_time: Date.parse(n_time) / 1000,
           limit: 1
         }

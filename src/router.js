@@ -13,9 +13,11 @@ import compare from './views/compare'
 import datamanage from './views/datamanage'
 import usermanage from './views/usermanage'
 import login from './views/login'
-import police from './views/police'
+import strategy from './views/strategy'
+import alerter from './views/alerter'
+import policy from './views/policy'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 
 const routes = [
@@ -64,9 +66,25 @@ const routes = [
     },
   },
   {
-    path: '/police',
-    name: 'police',
-    component: police,
+    path: '/strategy',
+    name: 'strategy',
+    component: strategy,
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/alerter',
+    name: 'alerter',
+    component: alerter,
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/policy',
+    name: 'policy',
+    component: policy,
     meta: {
       requireAuth: true,
     },
@@ -80,18 +98,20 @@ const routes = [
 
 // 页面刷新时，重新赋值token
 if (window.localStorage.getItem('token')) {
-  // let data = window.localStorage.getItem('user')
-  // console.log(data)
-  // if (typeof data === 'string') {
-  //   store.commit(types.USER, JSON.parse(data))
-  // }
   store.commit(types.LOGIN, window.localStorage.getItem('token'))
 }
 
 if (window.localStorage.getItem('user')) {
-  let userData = JSON.parse(window.localStorage.getItem('user'))
-  store.commit(types.USER, userData)
+  let userData = JSON.parse(window.localStorage.getItem('user'));
+  store.commit(types.USER, userData);
 }
+
+if (store.state.token){
+  store.commit(types.USERS);
+  store.commit(types.STRATEGY);
+  store.commit(types.ALERTER);
+}
+
 
 const router = new VueRouter({
   routes

@@ -15,18 +15,18 @@
               </el-submenu>
 
               <el-submenu index="2">
-                <template slot="title"><i class="el-icon-tickets"></i><span class="subTitle">策略管理</span></template>
+                <template slot="title"><i class="el-icon-tickets"></i><span class="subTitle">告警管理</span></template>
 
                 <el-menu-item-group>
-                  <el-menu-item index="3-1"><router-link to="/police">模板配置</router-link></el-menu-item>
+                  <el-menu-item index="3-1"><router-link to="/strategy">Strategy配置</router-link></el-menu-item>
                 </el-menu-item-group>
 
                 <el-menu-item-group>
-                  <el-menu-item index="3-1"><router-link to="/police">告警配置</router-link></el-menu-item>
+                  <el-menu-item index="3-1"><router-link to="/alerter">Alter配置</router-link></el-menu-item>
                 </el-menu-item-group>
 
                 <el-menu-item-group>
-                  <el-menu-item index="3-1"><router-link to="/police">策略配置</router-link></el-menu-item>
+                  <el-menu-item index="3-1"><router-link to="/policy">策略配置</router-link></el-menu-item>
                 </el-menu-item-group>
 
               </el-submenu>
@@ -61,7 +61,7 @@
         </el-col>
 
 
-        <el-col :span="1" :offset="17">
+        <el-col :span="2" :offset="16">
           <el-dropdown>
               <span class="el-icon-caret-bottom" v-if="isLogin" style="font-size: 15px">{{username}}
               </span>
