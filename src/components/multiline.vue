@@ -22,7 +22,7 @@
       }
     },
     props: [
-      'initMetricList',
+      'initMetricsList',
       'echartsid'
     ],
     watch: {
@@ -57,7 +57,7 @@
             trigger: 'axis'
           },
           legend: {
-            data: this.initMetricList
+            data: this.initMetricsList
           },
           grid: {
             left: '3%',
@@ -82,11 +82,11 @@
         return option
       },
       getTitle() {
-        let markArray = this.initMetricList[0].split(".", 2);
+        let markArray = this.initMetricsList[0].split(".", 2);
         return this.showHost + ":" + markArray[0] + '.' + markArray[1]
       },
       getYaxis() {
-        let args = this.initMetricList[0].split('.');
+        let args = this.initMetricsList[0].split('.');
         if (args[args.length - 1] === 'percent' || args[3] === 'percent') {
           return {
             type: 'value',
@@ -144,10 +144,10 @@
         let e_time = new Date();
         let s_time = new Date();
         s_time.setTime(e_time.getTime() - 3600 * 1000 * 6);
-        for (let metric_name of this.initMetricList) {
+        for (let metrics_name of this.initMetricsList) {
           let req_data = {
             endpoint: this.showHost,
-            metric: metric_name,
+            metrics: metrics_name,
             s_time: Date.parse(s_time) / 1000,
             e_time: Date.parse(e_time) / 1000
           };
@@ -163,9 +163,9 @@
             .then((res) => {
               if (res.data.length !== 0){
                 this.showdata.push({
-                  name: metric_name,
+                  name: metrics_name,
                   type: 'line',
-                  data: this.genShowData(metric_name, res.data)
+                  data: this.genShowData(metrics_name, res.data)
                 });
               } else {
               }
@@ -180,7 +180,7 @@
             })
         }
       },
-      genShowData(metric_name, data) {
+      genShowData(metrics_name, data) {
         let resData = [];
         let dataValueArray = data.map(function (x) {
           return x.value
@@ -191,15 +191,15 @@
           dataValueArray = this.counterDiff(dataValueArray)
         }
 
-        let args = metric_name.split('.');
-        let metricType = args[0];
+        let args = metrics_name.split('.');
+        let metricsType = args[0];
         let percent = args[args.length - 1];
-        if (metricType === 'mem' && percent !== 'percent') {
+        if (metricsType === 'mem' && percent !== 'percent') {
           resData = dataValueArray.map(function (x) {
               return Math.floor(x / 1024 / 1024)
             }
           )
-        } else if (metric_name.includes('net.dev.bytes')) {
+        } else if (metrics_name.includes('net.dev.bytes')) {
           resData = dataValueArray.map(function (x) {
               return Math.floor(x / 1000)
             }

@@ -137,7 +137,7 @@
         }
         return res
       },
-      genShowData(metric_name, data) {
+      genShowData(metrics_name, data) {
         let resData = [];
         let dataValueArray = data.map(function (x) {
           return x.value
@@ -147,15 +147,15 @@
           dataValueArray = this.counterDiff(dataValueArray);
         }
 
-        let args = metric_name.split('.');
-        let metricType = args[0];
+        let args = metrics_name.split('.');
+        let metricsType = args[0];
         let percent = args[args.length - 1];
-        if (metricType === 'mem' && percent !== 'percent') {
+        if (metricsType === 'mem' && percent !== 'percent') {
           resData = dataValueArray.map(function (x) {
               return Math.floor(x / 1024 / 1024)
             }
           )
-        } else if (metric_name.includes('net.dev.bytes')) {
+        } else if (metrics_name.includes('net.dev.bytes')) {
           resData = dataValueArray.map(function (x) {
               return Math.floor(x / 1000)
             }
@@ -172,11 +172,11 @@
         }
         return resData;
       },
-      getDataFormater(metric_name, data) {
-        let args = metric_name.split('.');
-        let metricType = args[0];
+      getDataFormater(metrics_name, data) {
+        let args = metrics_name.split('.');
+        let metricsType = args[0];
         let percent = args[args.length - 1];
-        if (metricType === 'mem' && percent !== 'percent') {
+        if (metricsType === 'mem' && percent !== 'percent') {
           return Math.floor(data / 1024 / 1024)
         } else {
           return data
@@ -192,7 +192,7 @@
         for (let hostName of this.showHost) {
           let req_data = {
             endpoint: hostName,
-            metric: this.showItem,
+            metrics: this.showItem,
             s_time: Date.parse(this.timeRange[0]) / 1000,
             e_time: Date.parse(this.timeRange[1]) / 1000
           };

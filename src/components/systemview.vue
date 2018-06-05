@@ -3,47 +3,47 @@
 
     <el-row>
       <el-col :span="6">
-        <gauge :metric-name="initGaugeMetricList[0]" guageid="load1mingaugeechart"></gauge>
+        <gauge :metrics-name="initGaugeMetricsList[0]" guageid="load1mingaugeechart"></gauge>
       </el-col>
       <el-col :span="6">
-        <gauge :metric-name="initGaugeMetricList[1]" guageid="load5mingaugeechart"></gauge>
+        <gauge :metrics-name="initGaugeMetricsList[1]" guageid="load5mingaugeechart"></gauge>
       </el-col>
       <el-col :span="6">
-        <gauge :metric-name="initGaugeMetricList[2]" guageid="load15mingaugeechart"></gauge>
+        <gauge :metrics-name="initGaugeMetricsList[2]" guageid="load15mingaugeechart"></gauge>
       </el-col>
       <el-col :span="6">
-        <gauge :metric-name="initGaugeMetricList[3]" guageid="dfgaugeechart"></gauge>
+        <gauge :metrics-name="initGaugeMetricsList[3]" guageid="dfgaugeechart"></gauge>
       </el-col>
     </el-row>
 
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initLoadMetricList" echartsid="loadecharts"></multiline>
+        <multiline :init-metrics-list="initLoadMetricsList" echartsid="loadecharts"></multiline>
       </el-col>
     </el-row>
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initNetMetricList" echartsid="netcharts"></multiline>
+        <multiline :init-metrics-list="initNetMetricsList" echartsid="netcharts"></multiline>
       </el-col>
     </el-row>
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initCpuMetricList" echartsid="cpuecharts"></multiline>
+        <multiline :init-metrics-list="initCpuMetricsList" echartsid="cpuecharts"></multiline>
       </el-col>
     </el-row>
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initMemMetricList" echartsid="memecharts"></multiline>
+        <multiline :init-metrics-list="initMemMetricsList" echartsid="memecharts"></multiline>
       </el-col>
     </el-row>
 
     <el-row>
       <el-col :span="24">
-        <multiline :init-metric-list="initNetDevMetricList" echartsid="netdevecharts"></multiline>
+        <multiline :init-metrics-list="initNetDevMetricsList" echartsid="netdevecharts"></multiline>
       </el-col>
     </el-row>
 
@@ -60,35 +60,35 @@
     name: 'systemview',
     data() {
       return {
-        initGaugeMetricList: [
+        initGaugeMetricsList: [
           "system.load.1min",
           "system.load.avg.5min",
           "system.load.avg.15min",
           'df.bytes.used.percent./',
         ],
-        initCpuMetricList: [
+        initCpuMetricsList: [
           "cpu.system.percent",
           "cpu.user.percent",
           "cpu.iowait.percent",
           "cpu.idle.percent",
         ],
-        initMemMetricList: [
+        initMemMetricsList: [
           "mem.virtual.used",
           "mem.virtual.cached",
           "mem.virtual.available",
           "mem.virtual.buffers",
           "mem.virtual.free"
         ],
-        initLoadMetricList: [
+        initLoadMetricsList: [
           "system.load.avg.1min/core",
         ],
-        initNetMetricList: [
+        initNetMetricsList: [
           // "net.conn.syn_recv",
           "net.conn.established",
           "net.conn.time_wait",
           "net.conn.syn_recv"
         ],
-        initNetDevMetricList: [
+        initNetDevMetricsList: [
           "net.dev.bytes.sent." + this.$defaultShowNetDev,
           "net.dev.bytes.receive." + this.$defaultShowNetDev
         ]

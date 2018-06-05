@@ -22,7 +22,7 @@
     },
     props: [
       'guageid',
-      'metricName'
+      'metricsName'
     ],
     watch: {
       showdata: {
@@ -41,7 +41,7 @@
       }
     },
     methods: {
-      getOption(metric_info) {
+      getOption(metrics_info) {
         let option = {
           tooltip: {
             formatter: "{a} <br/>{b} : {c}%"
@@ -72,7 +72,7 @@
 
         let req_data = {
           endpoint: this.showHost,
-          metric: this.metricName,
+          metrics: this.metricsName,
           s_time: Date.parse(n_time) / 1000 - 60,
           e_time: Date.parse(n_time) / 1000,
           limit: 1
@@ -88,7 +88,7 @@
             }
           })
           .then((res) => {
-            this.showdata.name = this.metricName;
+            this.showdata.name = this.metricsName;
             this.showdata.value = res.data[0].value
             this.myChart.setOption(this.getOption());
             this.myChart.hideLoading();

@@ -47,7 +47,7 @@
         for (let hostName of formData.chosedhost) {
           let req_data = {
             endpoint: hostName,
-            metric: '*',
+            metrics: '*',
             s_time: Date.parse(timeRange[0]) / 1000,
             e_time: Date.parse(timeRange[1]) / 1000
           }

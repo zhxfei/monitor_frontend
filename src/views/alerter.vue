@@ -49,6 +49,17 @@
         </template>
       </el-table-column>
 
+
+      <el-table-column
+        label="收敛时间"
+        align="center">
+        <template slot-scope="scope">
+          <i class="el-icon-email"></i>
+          <span style="text-align:center">{{ scope.row.convergence_time }}s</span>
+        </template>
+      </el-table-column>
+
+
       <el-table-column
         label="发送给用户"
         align="center">
@@ -90,12 +101,17 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="Alerter type"
+        <el-form-item label="告警类型"
                       required>
           <el-input v-model="form.type"></el-input>
         </el-form-item>
 
-        <el-form-item label="to_persons"
+        <el-form-item label="收敛时间"
+                      required>
+          <el-input v-model="form.convergence_time"></el-input>
+        </el-form-item>
+
+        <el-form-item label="发送给哪些用户"
                       required>
           <div style="margin: 15px 0;"></div>
           <el-checkbox-group v-model="form.to_persons">
@@ -127,6 +143,11 @@
         <el-form-item label="Alerter type"
                       required>
           <el-input v-model="userAddForm.type"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Alerter convergence"
+                      required>
+          <el-input v-model="userAddForm.convergence_time"></el-input>
         </el-form-item>
 
         <el-form-item label="to_persons"
@@ -168,11 +189,13 @@
           alerter_id: "",
           name: "",
           type: "",
+          convergence_time: "",
           to_persons: [],
         },
         userAddForm: {
           name: "",
           type: "",
+          convergence_time: "",
           to_persons: [],
         },
         rulesForAdd: {
@@ -204,6 +227,7 @@
         (this.form.alerter_id = row.alerter_id),
           (this.form.name = row.name),
           (this.form.type = row.type),
+          (this.form.convergence_time = row.convergence_time),
           (this.form.to_persons = row.to_persons);
       },
       handleEditSure() {
@@ -227,7 +251,7 @@
           .catch(err => {
             this.$notify({
               title: "失败",
-              message: err.message.grade,
+              message: err.message,
               type: "error"
             });
           });

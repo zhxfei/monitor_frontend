@@ -22,7 +22,7 @@
         showDataObj: {
           reqInfo: {
             endpoint: this.$defaultShowHost,  // default
-            metric: 'system.load.avg.1min/core', // default
+            metrics: 'system.load.avg.1min/core', // default
             e_time: Date.parse(new Date()),  // default
             s_time: 0,  // default
           },
@@ -46,7 +46,7 @@
       eventHandler(formData) {
         let req_data = {
           endpoint: formData.chosedhost,
-          metric: formData.chosedItem,
+          metrics: formData.chosedItem,
           s_time: Date.parse(formData.timeRange[0]) / 1000,
           e_time: Date.parse(formData.timeRange[1]) / 1000
         }
@@ -67,14 +67,14 @@
             this.showDataObj.date = []
             for (var obj of res.data) {
               this.showDataObj.date.push(this.dateFormat(obj.timestamp))
-              this.showDataObj.data.push(this.getDataFormater(this.showDataObj.reqInfo.metric, obj.value));
+              this.showDataObj.data.push(this.getDataFormater(this.showDataObj.reqInfo.metrics, obj.value));
             }
           })
           .catch((err) => {
             console.log(err)
           })
       }, getYaxis() {
-        let args = this.showDataObj.reqInfo.metric.split('.')
+        let args = this.showDataObj.reqInfo.metrics.split('.')
         if (args[args.length - 1] === 'percent' || args[3] === 'percent') {
           return {
             type: 'value',
@@ -109,7 +109,7 @@
           },
           title: {
             left: 'center',
-            text: val.reqInfo.endpoint + '.' + val.reqInfo.metric,
+            text: val.reqInfo.endpoint + '.' + val.reqInfo.metrics,
           },
           toolbox: {
             feature: {
@@ -145,7 +145,7 @@
           }],
           series: [
             {
-              name: val.reqInfo.metric,
+              name: val.reqInfo.metrics,
               type: 'line',
               smooth: true,
               symbol: 'none',
@@ -190,11 +190,11 @@
         this.myChart.hideLoading();
 
       },
-      getDataFormater(metric_name, data) {
-        let args = metric_name.split('.')
-        let metricType = args[0]
+      getDataFormater(metrics_name, data) {
+        let args = metrics_name.split('.')
+        let metricsType = args[0]
         let percent = args[args.length - 1]
-        if (metricType == 'mem' && percent !== 'percent') {
+        if (metricsType == 'mem' && percent !== 'percent') {
           return Math.floor(data / 1024 / 1024)
         } else {
           return data
